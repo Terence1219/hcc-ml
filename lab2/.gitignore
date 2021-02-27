@@ -1,0 +1,17 @@
+# dataset
+dataset
+*.zip
+
+# .py
+venv
+
+__pycache__
+*_ans.py
+
+# model
+checkpoints*
+
+# log
+logs
+
+!example/*
