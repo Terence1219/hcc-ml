@@ -1,0 +1,24 @@
+# vscode
+.vscode
+
+# python
+venv
+__pycache__
+
+# data
+*.png
+*.jpg
+*.tar
+*.gz
+*.csv
+*.zip
+
+# slides
+*.pdf
+*.key
+*.ppt
+
+# models
+*.npz
+*.tf.*
+*.pt
