@@ -1,5 +1,8 @@
 # data
 pokemon
 pokemon_processed
-LAB1_ans.py
-LAB1_test.py
+
+# python
+.python-version
+venv
+__pycache__

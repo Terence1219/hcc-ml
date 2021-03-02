@@ -2,16 +2,16 @@
 dataset
 *.zip
 
-# .py
+# python
 venv
-
+.python-version
 __pycache__
-*_ans.py
 
 # model
-checkpoints*
+checkpoints
+pretrain
 
 # log
 logs
 
-!example/*
+# !example/*
