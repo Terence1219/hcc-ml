@@ -1,0 +1,8 @@
+numpy
+torch>=1.2
+torchvision
+matplotlib
+terminaltables
+pillow
+tqdm
+imgaug

@@ -1,0 +1,11 @@
+.vscode/
+
+output
+data/coco
+weights/*.weights
+weights/darknet53.conv.74
+checkpoints
+logs/
+
+__pycache__
+.python-version
