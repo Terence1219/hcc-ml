@@ -96,7 +96,6 @@ class LPRModel(nn.Module):
             The concatenated output should be in shape [batch, 7, 36].
         output = torch.cat(????)
         '''
-        output = torch.cat(outputs, dim=1)
         return output
 
 
