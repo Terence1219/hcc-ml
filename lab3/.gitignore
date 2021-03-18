@@ -9,3 +9,7 @@ logs/
 
 __pycache__
 .python-version
+
+!data/
+!data/samples
+!data/samples/*
