@@ -91,21 +91,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     main(args)
-
-
-train_loader = DataLoader(dataset=TrainDataset() ...)
-val_loader = DataLoader(dataset=ValDataset() ...)
-model = LPRModel()
-optim = torch.optim.Adam(model.parameters() ...)
-...
-for epoch in range(args.epochs):
-    with tqdm(total=len(train_loader), dynamic_ncols=True) as pbar:
-        for image, label in train_loader:
-            predict = model(image)
-            loss = loss_fn(predict.transpose(1, 2), label)
-            optim.step()
-            ...
-    with torch.no_grad():
-        for image, label in val_loader:
-    if epoch == 0 or (epoch + 1) % args.checkpoint_period == 0:
-        torch.save(model.state_dict(), path)

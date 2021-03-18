@@ -29,16 +29,15 @@ def main(args):
     img = img.unsqueeze(0).to(device)
     print(img.shape)
 
-    ckpt = torch.load(args.checkpoint)
+    ckpt = torch.load(
+        args.checkpoint, map_location=lambda storage, loc: storage)
     model = LPRModel().to(device)
     model.load_state_dict(ckpt)
     model.eval()
     print('weights loaded')
 
-    torch.cuda.synchronize()
     t1 = time.time()
     predict = model(img)
-    torch.cuda.synchronize()
     t2 = time.time()
     predict = torch.argmax(predict, axis=-1).cpu()
     print('time: {}'.format(t2 - t1))
