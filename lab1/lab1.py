@@ -15,8 +15,8 @@ from sklearn.svm import SVC
 from PIL import Image, ImageOps
 
 
-POKEMON_PATH = './pokemon'
-POKEMON_PROCESSED_PATH = './pokemon_processed'
+POKEMON_RGB_PATH = './pokemon'
+POKEMON_GRAY_PATH = './pokemon_processed'
 
 
 def plot_gallery(images, titles, file_name, h, w, n_col=4):
@@ -37,20 +37,20 @@ def plot_gallery(images, titles, file_name, h, w, n_col=4):
 
 def get_pokemon(h, w):
     """
-    Processing data. Resize pokemon images to size h * w and convert to gray
-    scale. For the convenience of the future, save preprocessed images to the
-    other folder.
+    Processing data. Resize pokemon images to size h * w and convert them to
+    gray scale. For the convenience, save preprocessed images to the other
+    folder.
     """
-    os.makedirs(POKEMON_PROCESSED_PATH, exist_ok=True)
+    os.makedirs(POKEMON_GRAY_PATH, exist_ok=True)
     pokemon_names, pokemon_paths = [], []
 
-    for pokemon_name in sorted(os.listdir(POKEMON_PATH)):
-        folder = os.path.join(POKEMON_PATH, pokemon_name)
+    for pokemon_name in sorted(os.listdir(POKEMON_RGB_PATH)):
+        folder = os.path.join(POKEMON_RGB_PATH, pokemon_name)
         if not os.path.isdir(folder):
             continue
 
         # make new dir for the pokemon
-        new_folder = os.path.join(POKEMON_PROCESSED_PATH, pokemon_name)
+        new_folder = os.path.join(POKEMON_GRAY_PATH, pokemon_name)
         os.makedirs(new_folder, exist_ok=True)
 
         # get path of images with file extension png
@@ -60,21 +60,21 @@ def get_pokemon(h, w):
         # iterate over existing pokemon's pictures and process each one
         for i, path in enumerate(sorted(paths)):
             img = Image.open(path)
-            # TODO: Checkpoint 1, Preprocessing
-            # 2. Convert RGB image to grayscale
-            # 1. Resize image into h x w
+            # TODO: Checkpoint 1. Preprocess all images.
+            # 2. Convert `img` to grayscale.
+            # 1. Resize `img` to h x w.
             ####
             '''
             img = img.convert(...)
             img = ImageOps.fit(...)
             '''
             new_path = os.path.join(
-                POKEMON_PROCESSED_PATH, pokemon_name, '%d.jpg' % i)
+                POKEMON_GRAY_PATH, pokemon_name, '%d.jpg' % i)
             img.save(new_path)
 
     # read pokemon names and paths
-    for pokemon_name in sorted(os.listdir(POKEMON_PROCESSED_PATH)):
-        folder = os.path.join(POKEMON_PROCESSED_PATH, pokemon_name)
+    for pokemon_name in sorted(os.listdir(POKEMON_GRAY_PATH)):
+        folder = os.path.join(POKEMON_GRAY_PATH, pokemon_name)
         if not os.path.isdir(folder):
             continue
         paths = [os.path.join(folder, f) for f in sorted(os.listdir(folder))]
@@ -116,9 +116,8 @@ def main():
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
 
-        # TODO: Checkpoint 4, Apply PCA on training set before SVM
-        # 1. Set the number of eigenvectors
-        # 2. View eigenpokemons
+        # TODO: Checkpoint 4. Apply PCA on the dataset before training the SVM.
+        # 1. Update `n_components` to set the number of eigenvectors.
         ####
         '''
         n_components = ???
@@ -126,14 +125,16 @@ def main():
         eigenpokemons_titles = [
             "eigenpokemon %d" % i
             for i in range(pca.components_.shape[0])]
-        plot_gallery(pca.components_, eigenpokemons_titles, "PCA", height, width)
-        print("Projecting the input data on the eigenpokemon orthonormal basis")
+        plot_gallery(
+            pca.components_, eigenpokemons_titles, "PCA", height, width)
+        print(
+            "Projecting the input data on the eigenpokemon orthonormal basis")
         X_train = pca.transform(X_train)
         X_test = pca.transform(X_test)
         '''
 
-        # TODO: Checkpoint 3, Train an SVM classification model
-        # 1. Select appropriate parameter for GridSearchCV
+        # TODO: Checkpoint 3. Train a SVM classification model.
+        # 1. Update `param_grid` to let GridSearchCV find the best value.
         ####
         '''
         print("Fitting SVM to the training set")
@@ -142,7 +143,8 @@ def main():
                 'C': [???],
                 'gamma': [???],
         }
-        clf = GridSearchCV(SVC(class_weight='balanced'), param_grid, cv=3)
+        clf = GridSearchCV(
+            SVC(class_weight='balanced'), param_grid, cv=3)
         clf = clf.fit(X_train, y_train)
         print('Best params', clf.best_params_)
         print("Evaluation SVM quality on the test set")
@@ -158,8 +160,8 @@ def main():
             print('')
         '''
 
-        # TODO: Checkpoint 2, Train an KNN classification model
-        # 1. Select appropriate paramter for GridSearchCV
+        # TODO: Checkpoint 2. Train a KNN classification model.
+        # 1. Extend `n_neighbors` to let GridSearchCV find the best value.
         print("Fitting KNN to the training set")
         param_grid = {
             'n_neighbors': [1]
