@@ -29,11 +29,11 @@ def main(args):
     for epoch in range(args.epochs):
         avg_loss = 0
         avg_acc = 0
-        model.train()               # set dropout, batchnorm, ... to train mode
-        with tqdm(total=len(train_loader), dynamic_ncols=True) as pbar:
+        model.train()
+        with tqdm(train_loader, ncols=0) as pbar:
             pbar.set_description(
                 'Epoch %2d/%2d' % (epoch + 1, args.epochs))
-            for image, label in train_loader:
+            for image, label in pbar:
                 image = image.to(device)
                 label = label.to(device)
                 predict = model(image)
@@ -47,7 +47,6 @@ def main(args):
                 avg_loss += loss.item()
                 avg_acc += acc.item()
                 pbar.set_postfix(loss='%.4f' % loss)
-                pbar.update(1)
             avg_loss = avg_loss / len(train_loader)
             avg_acc = avg_acc / len(train_loader.dataset)
             train_writer.add_scalar('loss', avg_loss, epoch)
@@ -55,8 +54,8 @@ def main(args):
 
         avg_val_loss = 0
         avg_val_acc = 0
-        model.eval()                # set dropout, batchnorm, ... to eval mode
-        with torch.no_grad():       # disable caching to accelerate computing
+        model.eval()
+        with torch.no_grad():
             for image, label in val_loader:
                 image = image.to(device)
                 label = label.to(device)

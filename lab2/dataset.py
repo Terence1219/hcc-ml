@@ -55,10 +55,10 @@ class ValDataset(LicensePlateDataset):
     def __init__(self, csv_path='./dataset/val/trainValNew.csv'):
         '''
         Checkpoint 1: Resize image to (HEIGHT, WIDTH)
-        Hint: Add resize transformation to the begining of following transfrom
+        Hint: Add resize transformation to the begining of transfrom
         '''
         transform = transforms.Compose([
-
+            ???
             transforms.ToTensor()
         ])
         super().__init__(csv_path, transform)
