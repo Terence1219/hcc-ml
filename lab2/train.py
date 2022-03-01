@@ -26,13 +26,13 @@ def main(args):
 
     train_writer = SummaryWriter(logdir=os.path.join(args.log_dir, 'train'))
     val_writer = SummaryWriter(os.path.join(args.log_dir, 'val'))
-    for epoch in range(args.epochs):
+    for epoch in range(1, args.epochs + 1):
         avg_loss = 0
         avg_acc = 0
         model.train()
-        with tqdm(train_loader, ncols=0) as pbar:
+        with tqdm(train_loader, ncols=0, leave=False) as pbar:
             pbar.set_description(
-                'Epoch %2d/%2d' % (epoch + 1, args.epochs))
+                'Epoch %3d/%3d' % (epoch, args.epochs))
             for image, label in pbar:
                 image = image.to(device)
                 label = label.to(device)
@@ -69,12 +69,12 @@ def main(args):
         avg_val_acc = avg_val_acc / len(val_loader.dataset)
         val_writer.add_scalar('loss', avg_val_loss, epoch)
         val_writer.add_scalar('acc', avg_val_acc, epoch)
-        print('train_loss: %.4f, val_loss: %.4f, '
+        print('Epoch %3d/%3d train_loss: %.4f, val_loss: %.4f, '
               'train_acc: %.4f, val_acc: %.4f' % (
-                avg_loss, avg_val_loss, avg_acc, avg_val_acc))
-        if epoch == 0 or (epoch + 1) % args.checkpoint_period == 0:
-            path = os.path.join(
-                args.checkpoint_dir, 'ckpt%d.pt' % (epoch + 1))
+                    epoch, args.epochs,
+                    avg_loss, avg_val_loss, avg_acc, avg_val_acc))
+        if epoch % args.checkpoint_period == 0:
+            path = os.path.join(args.checkpoint_dir, 'ckpt%d.pt' % epoch)
             os.makedirs(args.checkpoint_dir, exist_ok=True)
             torch.save(model.state_dict(), path)
 

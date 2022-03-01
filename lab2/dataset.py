@@ -29,11 +29,11 @@ class LicensePlateDataset(torch.utils.data.Dataset):
         for label in self.labels:
             assert len(label) == 7
 
-    def __len__(self):          # return the size of dataset
+    def __len__(self):           # return the size of dataset
         return len(self.paths)
 
-    def __getitem__(self, idx): # return i-th element in dataset
-        image = Image.open(self.paths[idx]) # load on demand
+    def __getitem__(self, idx):  # return i-th element in dataset
+        image = Image.open(self.paths[idx])
         if self.transform is not None:
             image = self.transform(image)
         return image, torch.tensor(self.labels[idx])

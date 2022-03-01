@@ -24,15 +24,16 @@ class BasicBlock(nn.Module):
 #         super().__init__()
 #         '''
 #         Checkpoint 2:
-#             Use `nn.Sequential` to rewrite `BasicBlock`
+#             Use `nn.Sequential` to rewrite `BasicBlock`.
 #         '''
+#         self.main = ???
 
 #     def forward(self, x):
 #         '''
 #         Checkpoint 2:
-#             Use `nn.Sequential` to rewrite `BasicBlock`
+#             Use `nn.Sequential` to rewrite `BasicBlock`.
 #         '''
-#         return x
+#         return ???
 
 
 class ConvBlock(nn.Module):
@@ -78,7 +79,7 @@ class LPRModel(nn.Module):
             Concatenate `outputs` along the axis 1.
             The shape of the result must be [B, 7, 36].
         '''
-        # output = torch.cat(????)
+        # output = ???
         return output
 
 
