@@ -79,7 +79,7 @@ class LPRModel(nn.Module):
             Concatenate `outputs` along the axis 1.
             The shape of the result must be [B, 7, 36].
         '''
-        # output = ???
+        # output = torch.cat(???)
         return output
 
 
