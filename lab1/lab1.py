@@ -3,9 +3,9 @@ import glob
 
 import matplotlib.pyplot as plot
 import numpy as np
-from sklearn.model_selection import KFold, GridSearchCV
-from sklearn.metrics import classification_report, confusion_matrix
-from sklearn.metrics import precision_score, recall_score
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score
 from sklearn.decomposition import PCA
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
@@ -57,14 +57,12 @@ def get_pokemon(h, w):
         # iterate over existing pokemon's pictures and process each one
         for i, path in enumerate(sorted(paths)):
             img = Image.open(path)
-            # TODO: Checkpoint 1. Preprocess all images.
+            # TODO: Checkpoint 1.
             # 2. Convert `img` to grayscale.
             # 1. Resize `img` to h x w.
             ####
-            '''
-            img = img.convert(...)
-            img = ImageOps.fit(...)
-            '''
+            img = img.convert(???)
+            img = ImageOps.fit(???)
             new_path = os.path.join(
                 POKEMON_GRAY_PATH, pokemon_name, '%d.jpg' % i)
             img.save(new_path)
@@ -100,93 +98,79 @@ def get_pokemon(h, w):
     return pokemons, target, target_names
 
 
+def show_results(y_test, y_pred, target_names):
+    ac = accuracy_score(y_test, y_pred)
+    pr = precision_score(y_test, y_pred, average='macro')
+    rc = recall_score(y_test, y_pred, average='macro')
+    print("\nEvaluate on test set:")
+    print("  Accuracy : %.2f" % ac)
+    print("  Precision: %.2f" % pr)
+    print("  Recall   : %.2f" % rc)
+
+    print("\nConfusion Matrix:")
+    print(''.join('%10s' % name for name in ([" "] + target_names)))
+    for idx, arr in enumerate(confusion_matrix(y_test, y_pred)):
+        print('%10s' % target_names[idx], end='')
+        for v in arr:
+            print('%10s' % str(v), end='')
+        print('')
+    print('')
+
+
 def main():
-    np.random.seed(42)
+    np.random.seed(1)
     height, width = 200, 200
-    pokemons, target, target_names = get_pokemon(height, width)
+    X, y, target_names = get_pokemon(height, width)
 
-    X = pokemons.reshape(len(pokemons), -1)
-    y = target
-    precisions = []
-    recalls = []
-    for train_index, test_index in KFold(n_splits=4, shuffle=True).split(X):
-        X_train, X_test = X[train_index], X[test_index]
-        y_train, y_test = y[train_index], y[test_index]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 
-        # TODO: Checkpoint 4. Apply PCA on the dataset before training the SVM.
-        # 1. Update `n_components` to set the number of eigenvectors.
-        ####
-        '''
-        n_components = ???
-        pca = PCA(n_components=n_components, whiten=True).fit(X_train)
-        eigenpokemons_titles = [
-            "eigenpokemon %d" % i
-            for i in range(pca.components_.shape[0])]
-        plot_gallery(
-            pca.components_, eigenpokemons_titles, "PCA", height, width)
-        print(
-            "Projecting the input data on the eigenpokemon orthonormal basis")
-        X_train = pca.transform(X_train)
-        X_test = pca.transform(X_test)
-        '''
+    # TODO: Checkpoint 4. Apply PCA on the dataset before training the SVM.
+    # 1. Update `n_components` to set the number of eigenvectors.
+    ####
+    '''
+    print("Compute eigen vectors of train set.")
+    n_components = ???
+    pca = PCA(n_components=n_components, whiten=True).fit(X_train)
+    print("Decompose the dataset by eigen vectors.")
+    X_train = pca.transform(X_train)
+    X_test = pca.transform(X_test)
+    eigenpokemons_titles = [
+        "eigenpokemon %d" % i
+        for i in range(pca.components_.shape[0])]
+    plot_gallery(pca.components_, eigenpokemons_titles, "PCA", height, width)
+    '''
 
-        # TODO: Checkpoint 3. Train a SVM classification model.
-        # 1. Update `param_grid` to let GridSearchCV find the best value.
-        ####
-        '''
-        print("Fitting SVM to the training set")
-        param_grid = {
-                'kernel': ['rbf', 'linear'],
-                'C': [???],
-                'gamma': [???],
-        }
-        clf = GridSearchCV(
-            SVC(class_weight='balanced'), param_grid, cv=3)
-        clf = clf.fit(X_train, y_train)
-        print('Best params', clf.best_params_)
-        print("Evaluation SVM quality on the test set")
-        y_pred = clf.predict(X_test)
-        print("SVM Report")
-        print(classification_report(y_test, y_pred, target_names=target_names))
+    # TODO: Checkpoint 3. Train a SVM classification model.
+    # 1. Update `param_grid` to let GridSearchCV find the best parameter.
+    ####
+    '''
+    print("-" * 24 + " SVC " + "-" * 24)
+    param_grid = {
+        'kernel': ['rbf', 'linear'],
+        'C': [???],
+        'gamma': [???],
+    }
+    clf = GridSearchCV(
+        SVC(class_weight='balanced'), param_grid, cv=3)
+    clf = clf.fit(X_train, y_train)
+    print('Best params  : %s' % clf.best_params_)
+    print('Best accuracy: %.2f' % clf.best_score_)
+    y_pred = clf.predict(X_test)
+    show_results(y_test, y_pred, target_names)
+    '''
 
-        print(''.join('%10s' % name for name in ([" "] + target_names)))
-        for idx, arr in enumerate(confusion_matrix(y_test, y_pred)):
-            print('%10s' % target_names[idx], end='')
-            for v in arr:
-                print('%10s' % str(v), end='')
-            print('')
-        '''
-
-        # TODO: Checkpoint 2. Train a KNN classification model.
-        # 1. Extend `n_neighbors` to let GridSearchCV find the best value.
-        print("Fitting KNN to the training set")
-        param_grid = {
-            'n_neighbors': [1]
-        }
-        clf = GridSearchCV(KNeighborsClassifier(), param_grid, cv=3)
-        clf = clf.fit(X_train, y_train)
-        print('Best params', clf.best_params_)
-        print("Evaluation KNN quality on the test set")
-        y_pred = clf.predict(X_test)
-        print("KNN Report")
-        print(classification_report(y_test, y_pred, target_names=target_names))
-
-        print(''.join('%10s' % name for name in ([" "] + target_names)))
-        for idx, arr in enumerate(confusion_matrix(y_test, y_pred)):
-            print('%10s' % target_names[idx], end='')
-            for v in arr:
-                print('%10s' % str(v), end='')
-            print('')
-
-        precision = precision_score(y_test, y_pred, average='weighted')
-        precisions.append(precision)
-        recall = recall_score(y_test, y_pred, average='weighted')
-        recalls.append(recall)
-        print('-' * 80)
-
-    print('KFold average')
-    print('precision: %.4f' % np.mean(precisions))
-    print('recall   : %.4f' % np.mean(recalls))
+    # TODO: Checkpoint 2. Train a KNN classification model.
+    # 1. Extend `n_neighbors` to let GridSearchCV find the best value.
+    print("-" * 24 + " KNN " + "-" * 24)
+    param_grid = {
+        'n_neighbors': [1],
+    }
+    clf = GridSearchCV(KNeighborsClassifier(), param_grid, cv=3)
+    clf = clf.fit(X_train, y_train)
+    print('Best params  : %s' % clf.best_params_)
+    print('Best accuracy: %.2f' % clf.best_score_)
+    y_pred = clf.predict(X_test)
+    show_results(y_test, y_pred, target_names)
 
 
 if __name__ == "__main__":
