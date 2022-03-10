@@ -1,15 +1,18 @@
-.vscode/
 
-output
-data/coco
+.DS_Store
+build
+.git
+*.egg-info
+dist
+output/
+data/*
+backup
 weights/*.weights
-weights/darknet53.conv.74
-checkpoints
+weights/*.conv.*
+__pycache__
+checkpoints/
+
+.vscode/
 logs/
 
-__pycache__
 .python-version
-
-!data/
-!data/samples
-!data/samples/*

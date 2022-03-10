@@ -59,9 +59,9 @@ class RelativeLabels(object):
 
     def __call__(self, data):
         img, boxes = data
-        w, h, _ = img.shape
-        boxes[:, [1, 3]] /= h
-        boxes[:, [2, 4]] /= w
+        h, w, _ = img.shape
+        boxes[:, [1, 3]] /= w
+        boxes[:, [2, 4]] /= h
         return img, boxes
 
 
@@ -71,9 +71,9 @@ class AbsoluteLabels(object):
 
     def __call__(self, data):
         img, boxes = data
-        w, h, _ = img.shape
-        boxes[:, [1, 3]] *= h
-        boxes[:, [2, 4]] *= w
+        h, w, _ = img.shape
+        boxes[:, [1, 3]] *= w
+        boxes[:, [2, 4]] *= h
         return img, boxes
 
 
@@ -83,7 +83,7 @@ class PadSquare(ImgAug):
             iaa.PadToAspectRatio(
                 1.0,
                 position="center-center").to_deterministic()
-            ])
+        ])
 
 
 class ToTensor(object):
@@ -107,8 +107,7 @@ class Resize(object):
 
     def __call__(self, data):
         img, boxes = data
-        img = F.interpolate(
-            img.unsqueeze(0), size=self.size, mode="nearest").squeeze(0)
+        img = F.interpolate(img.unsqueeze(0), size=self.size, mode="nearest").squeeze(0)
         return img, boxes
 
 
