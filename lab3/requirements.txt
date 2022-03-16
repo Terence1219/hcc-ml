@@ -1,8 +1,0 @@
-imgaug
-matplotlib
-numpy
-pillow
-torch
-torchvision
-terminaltables
-tqdm
