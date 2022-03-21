@@ -52,11 +52,11 @@ class ConvBlock(nn.Module):
 class LPRModel(nn.Module):
     def __init__(self):
         super().__init__()
-        self.encoder = nn.Sequential(
-            ConvBlock(3, 32),         # [B, H / 2, W / 2, 32]
-            ConvBlock(32, 64),        # [B, H / 4, W / 4, 64]
-            ConvBlock(64, 128),       # [B, H / 8, W / 8, 128]
-            nn.Flatten(start_dim=1),  # [B, H / 8 x W / 8 x 128]
+        self.encoder = nn.Sequential
+            ConvBlock(3, 32),         # [B, 32, H / 2, W / 2]
+            ConvBlock(32, 64),        # [B, 64, H / 4, W / 4]
+            ConvBlock(64, 128),       # [B, 128, H / 8, W / 8]
+            nn.Flatten(start_dim=1),  # [B, 128 x H / 8 x W / 8]
         )
         self.classifiers = nn.ModuleList()
         for _ in range(7):
