@@ -5,4 +5,5 @@ pokemon_processed
 # python
 .python-version
 venv
+lab1env
 __pycache__
