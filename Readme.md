@@ -1,12 +1,12 @@
 # HCC Machine Learning Course 2022 Spring
 
-This repository contains the Machine Learning materials for in-class practice in Human Centric Computing Class (HCC) at National Yang Ming Chiao Tung University (NYCU).
+This repository contains the Machine Learning materials used for in-class practice in the Human Centric Computing Class (HCC) at National Yang Ming Chiao Tung University (NYCU).
 
 ## Lab1 - Pokemon Recognition
-Pokemon image recognition with `scikit-learn`.
+In this lab, we will perform Pokemon image recognition using `scikit-learn`.
 
 ## Lab2 - Deep License Plate Recognition
-License plate recognition with simple Convolutional Neural Network.
+In this lab, we will perform license plate recognition using a simple Convolutional Neural Network.
 
 ## Lab3 - Objection Detection: YOLOv3
-Objection detection with YOLOv3.
+In this lab, we will perform object detection from scratch using YOLOv3.
