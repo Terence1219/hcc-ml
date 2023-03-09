@@ -69,9 +69,9 @@ if __name__ == '__main__':
     dataset = TrainDataset()
     img, label = dataset[0]
     save_image(img, "train.jpg")
-    print(label)
+    print("train.jpg:", label)
 
     dataset = ValDataset()
     img, label = dataset[0]
     save_image(img, "val.jpg")
-    print(label)
+    print("val.jpg:", label)

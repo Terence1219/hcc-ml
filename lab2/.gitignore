@@ -3,7 +3,7 @@ dataset
 *.zip
 
 # python
-venv
+lab2env
 .python-version
 __pycache__
 

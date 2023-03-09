@@ -19,34 +19,46 @@ class BasicBlock(nn.Module):
         return x
 
 
-# class BasicBlock(nn.Module):
-#     def __init__(self, in_channels, out_channels):
-#         super().__init__()
-#         '''
-#         Checkpoint 2:
-#             Use `nn.Sequential` to rewrite `BasicBlock`.
-#         '''
-#         self.main = ???
+class BasicBlock(nn.Module):
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.main = nn.Sequential(
+            nn.Conv2d(
+                in_channels, out_channels, kernel_size=3, padding=1),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU())
 
-#     def forward(self, x):
-#         '''
-#         Checkpoint 2:
-#             Use `nn.Sequential` to rewrite `BasicBlock`.
-#         '''
-#         return ???
+    def forward(self, x):
+        return self.main(x)
 
 
 class ConvBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
         super().__init__()
-        self.main = nn.Sequential(
-            BasicBlock(in_channels, out_channels),
-            BasicBlock(out_channels, out_channels),
-            BasicBlock(out_channels, out_channels),
-            nn.MaxPool2d((2, 2)))
+        self.basicblock1 = BasicBlock(in_channels, out_channels)
+        self.basicblock2 = BasicBlock(out_channels, out_channels)
+        self.basicblock3 = BasicBlock(out_channels, out_channels)
+        self.maxpool = nn.MaxPool2d((2, 2))
 
     def forward(self, x):
-        return self.main(x)
+        x = self.basicblock1(x)
+        x = self.basicblock2(x)
+        x = self.basicblock3(x)
+        x = self.maxpool(x)
+        return x
+
+
+# class ConvBlock(nn.Module):
+#     '''
+#     Checkpoint 2:
+#         Use `nn.Sequential` to rewrite `ConvBlock`.
+#     '''
+#     def __init__(self, in_channels, out_channels):
+#         super().__init__()
+#         self.main = ???
+
+#     def forward(self, x):
+#         return ???
 
 
 class LPRModel(nn.Module):
