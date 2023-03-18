@@ -61,8 +61,8 @@ def get_pokemon(h, w):
             # - Convert `img` to grayscale.
             # - Resize `img` to h x w.
             ####
-            img = img.convert(???)
-            img = ImageOps.fit(???)
+            img = img.convert("L")
+            img = ImageOps.fit(img, (200,200))
             new_path = os.path.join(
                 POKEMON_GRAY_PATH, pokemon_name, '%d.jpg' % i)
             img.save(new_path)
@@ -127,40 +127,40 @@ def main():
     # TODO: Checkpoint 4. Apply PCA to the dataset before training the SVM.
     # - Update `n_components` to set the number of eigenvectors.
     ####
-    # print("Compute eigen vectors of train set.")
-    # n_components = ???
-    # pca = PCA(n_components=n_components, whiten=True).fit(X_train)
-    # print("Decompose the dataset by eigen vectors.")
-    # X_train = pca.transform(X_train)
-    # X_test = pca.transform(X_test)
-    # eigenpokemons_titles = [
-    #     "eigenpokemon %d" % i
-    #     for i in range(pca.components_.shape[0])]
-    # plot_gallery(pca.components_, eigenpokemons_titles, "PCA", height, width)
+    print("Compute eigen vectors of train set.")
+    n_components = 8
+    pca = PCA(n_components=n_components, whiten=True).fit(X_train)
+    print("Decompose the dataset by eigen vectors.")
+    X_train = pca.transform(X_train)
+    X_test = pca.transform(X_test)
+    eigenpokemons_titles = [
+        "eigenpokemon %d" % i
+        for i in range(pca.components_.shape[0])]
+    plot_gallery(pca.components_, eigenpokemons_titles, "PCA", height, width)
 
     # TODO: Checkpoint 3. Train a SVM classification model.
     # - Update `param_grid` to allow GridSearchCV to find the best parameters.
     ####
-    # print("-" * 24 + " SVC " + "-" * 24)
-    # param_grid = {
-    #     'kernel': ['rbf', 'linear'],
-    #     'C': [???],
-    #     'gamma': [???],
-    # }
-    # clf = GridSearchCV(
-    #     SVC(class_weight='balanced'), param_grid, cv=3)
-    # clf = clf.fit(X_train, y_train)
-    # print('Best params  : %s' % clf.best_params_)
-    # print('Best accuracy: %.2f' % clf.best_score_)
-    # y_pred = clf.predict(X_test)
-    # show_results(y_test, y_pred, target_names)
+    print("-" * 24 + " SVC " + "-" * 24)
+    param_grid = {
+        'kernel': ['rbf','linear'],
+        'C': [1],
+        'gamma': ['scale','auto']
+    }
+    clf = GridSearchCV(
+        SVC(class_weight='balanced'), param_grid, cv=3)
+    clf = clf.fit(X_train, y_train)
+    print('Best params  : %s' % clf.best_params_)
+    print('Best accuracy: %.2f' % clf.best_score_)
+    y_pred = clf.predict(X_test)
+    show_results(y_test, y_pred, target_names)
 
     # TODO: Checkpoint 2. Train a KNN classification model.
     # - Extend 'n_neighbors' to let GridSearchCV find the best value.
     ####
     print("-" * 24 + " KNN " + "-" * 24)
     param_grid = {
-        'n_neighbors': [1],
+        'n_neighbors': [i for i in range(1,11)],
     }
     clf = GridSearchCV(KNeighborsClassifier(), param_grid, cv=3)
     clf = clf.fit(X_train, y_train)
