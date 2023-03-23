@@ -32,33 +32,38 @@ class BasicBlock(nn.Module):
         return self.main(x)
 
 
-class ConvBlock(nn.Module):
-    def __init__(self, in_channels, out_channels):
-        super().__init__()
-        self.basicblock1 = BasicBlock(in_channels, out_channels)
-        self.basicblock2 = BasicBlock(out_channels, out_channels)
-        self.basicblock3 = BasicBlock(out_channels, out_channels)
-        self.maxpool = nn.MaxPool2d((2, 2))
-
-    def forward(self, x):
-        x = self.basicblock1(x)
-        x = self.basicblock2(x)
-        x = self.basicblock3(x)
-        x = self.maxpool(x)
-        return x
-
-
 # class ConvBlock(nn.Module):
-#     '''
-#     Checkpoint 2:
-#         Use `nn.Sequential` to rewrite `ConvBlock`.
-#     '''
 #     def __init__(self, in_channels, out_channels):
 #         super().__init__()
-#         self.main = ???
+#         self.basicblock1 = BasicBlock(in_channels, out_channels)
+#         self.basicblock2 = BasicBlock(out_channels, out_channels)
+#         self.basicblock3 = BasicBlock(out_channels, out_channels)
+#         self.maxpool = nn.MaxPool2d((2, 2))
 
 #     def forward(self, x):
-#         return ???
+#         x = self.basicblock1(x)
+#         x = self.basicblock2(x)
+#         x = self.basicblock3(x)
+#         x = self.maxpool(x)
+#         return x
+
+
+class ConvBlock(nn.Module):
+    '''
+    Checkpoint 2:
+        Use `nn.Sequential` to rewrite `ConvBlock`.
+    '''
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.main = nn.Sequential(
+            BasicBlock(in_channels, out_channels),
+            BasicBlock(out_channels, out_channels),
+            BasicBlock(out_channels, out_channels),
+            nn.MaxPool2d((2, 2))
+        )
+
+    def forward(self, x):
+        return self.main(x)
 
 
 class LPRModel(nn.Module):
@@ -91,7 +96,7 @@ class LPRModel(nn.Module):
             Concatenate `outputs` along the axis 1.
             The shape of the result must be [B, 7, 36].
         '''
-        # output = torch.cat(???)
+        output = torch.cat(outputs,dim=1)
         return output
 
 

@@ -58,7 +58,7 @@ class ValDataset(LicensePlateDataset):
         Hint: Add resize transformation to the begining of transfrom
         '''
         transform = transforms.Compose([
-            ???
+            transforms.Resize((HEIGHT,WIDTH)),
             transforms.ToTensor()
         ])
         super().__init__(csv_path, transform)
